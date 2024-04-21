@@ -1,0 +1,32 @@
+{% extends 'website/base.html' %}
+{% block content %}
+
+<div class="row justify-content-center mb-3">
+<div class="col-md-6">
+<form method="POST" action="" class="mt-5 border p-4 bg-light shadow">
+	<h3 class="text-center text-secondary mb-3">Register</h3>
+	{% csrf_token %}
+	{% if form.errors %}
+			<div class="alert alert-warning alert-dismissible fade show" role="alert">
+			  Your Form Has Errors
+			  {% for field in form %}
+			  	{% if field.errors %}
+			  		{{ field.errors }}
+			  	{% endif %}
+			  {% endfor %}
+			  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+		{% endif %}
+
+	{{ form.as_p }}
+
+	<br/>
+	  <button type="submit" class="btn btn-secondary">Register</button>
+	</form>
+
+
+
+</div>
+</div>
+
+{% endblock %}
