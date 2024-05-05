@@ -1,0 +1,77 @@
+<!-- customer_detail.html -->
+
+{% extends 'website/base.html' %}  <!-- Extend your base template if you have one -->
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Customer [{{ customer.id}}] Details</h1>
+
+    <!-- Colored tabs for actions -->
+    <div class="my-4 gap-2 d-flex flex-wrap">
+        <a href="javascript:history.back()" class="btn btn-primary d-flex align-items-center justify-content-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left me-2" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708z"/>
+            </svg>
+            Back
+        </a>
+        
+        <a href="{% url "customer_update" customer.id%}" class="btn btn-warning">Modify</a>
+        <a href="#" class="btn btn-danger">Delete</a>
+        <a href="#" class="btn btn-info">Deals</a>
+        <a href="#" class="btn btn-success">Tasks</a>
+    </div>
+
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>First Name</th>
+                <td>{{ customer.first_name }}</td>
+            </tr>
+            <tr>
+                <th>Last Name</th>
+                <td>{{ customer.last_name }}</td>
+            </tr>
+            <tr>
+                <th>Phone Number</th>
+                <td>{{ customer.phone_number }}</td>
+            </tr>
+            <tr>
+                <th>Phone Number 2</th>
+                <td>{{ customer.phone_number_2 }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ customer.email }}</td>
+            </tr>
+            <tr>
+                <th>Address</th>
+                <td>{{ customer.address }}</td>
+            </tr>
+            <tr>
+                <th>Country</th>
+                <td>{{ customer.country }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ customer.city }}</td>
+            </tr>
+            <tr>
+                <th>State/Province</th>
+                <td>{{ customer.state }}</td>
+            </tr>
+            <tr>
+                <th>Zip Code</th>
+                <td>{{ customer.zip_code }}</td>
+            </tr>
+            <tr>
+                <th>Created At</th>
+                <td>{{ customer.created_at }}</td>
+            </tr>
+            <tr>
+                <th>Last Modified</th>
+                <td>{{ customer.updated_at }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}
