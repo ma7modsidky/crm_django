@@ -12,10 +12,14 @@ urlpatterns = [
     path('customers/create/', views.customer_create, name='customer_create'),
     path('customers/<int:pk>/', views.customer_detail, name='customer_detail'),
     path('customers/<int:pk>/modify/', views.customer_update, name='customer_update'),
+    path('customers/<int:pk>/delete/', views.customer_delete, name='customer_delete'),
     # Company Urls
     path('companies/', views.CompanyList.as_view(), name='company_list'),
     path('companies/<int:pk>/', views.CompanyDetail.as_view(), name='company_detail'),
     path('companies/create/', views.CompanyCreate.as_view(), name='company_create'),
+    path('companies/<int:pk>/modify/', views.CompanyUpdate.as_view(), name='company_update'),
     path('companies/<int:pk>/delete/', views.CompanyDelete.as_view(), name='company_delete'),
-    
+    # Users Urls
+    path('users/', views.UserList.as_view(), name='user_list'),
+    path('users/<int:pk>/', views.UserDetail.as_view(), name='user_detail'),
 ]

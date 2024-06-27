@@ -1,0 +1,56 @@
+<!-- user_list.html -->
+
+{% extends 'website/base.html' %}  <!-- Extend your base template if you have one -->
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Users List</h1>
+    <!-- Colored tabs for actions -->
+    <div class="my-4 gap-2 d-flex flex-wrap">
+        <a href="javascript:history.back()" class="btn btn-primary d-flex align-items-center justify-content-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-90deg-left me-2" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M1.146 4.854a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H12.5A2.5 2.5 0 0 1 15 6.5v8a.5.5 0 0 1-1 0v-8A1.5 1.5 0 0 0 12.5 5H2.707l3.147 3.146a.5.5 0 1 1-.708.708z"/>
+            </svg>
+            Back
+        </a>
+        
+       
+        <a href="" class="btn btn-success d-flex align-items-center justify-content-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-plus-fill me-2" viewBox="0 0 16 16">
+                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M8.5 6v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 1 0"/>
+              </svg>
+            Create
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Username</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Created at</th>
+                    <!-- Add more columns for other company fields -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in object_list %}
+                    <tr>
+                        <td><a href="{% url "user_detail" user.id %}">{{ user.id }}</a></td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.first_name }} {{ user.last_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.date_joined }}</td>
+                        <!-- Add more columns for other user fields -->
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    {% include "website/generics/pagination.html"  %}
+</div>
+{% endblock %}

@@ -6,6 +6,7 @@ from . models import Customer, Company , Deal, Task
 from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from django.urls import reverse_lazy
+from django.contrib.auth.models import User
 # Create your views here.
 
 def home(request):
@@ -58,7 +59,7 @@ def customer_list(request):
     """Display a list of customers."""
     customers = Customer.objects.all()
     # Set the number of items per page
-    items_per_page = 4
+    items_per_page = 10
     
     # Create a Paginator instance
     paginator = Paginator(customers, items_per_page)
@@ -103,6 +104,19 @@ def customer_create(request):
 
     return render(request, 'website/generics/create_edit_form.html', {'form': form})
 
+def customer_delete(request, pk):
+    customer = get_object_or_404(Customer, pk=pk)
+    if request.method == 'POST':
+        customer.delete()
+        messages.success(request, f'Customer {customer.name} successfully deleted.')
+        return redirect('customer_list')  # Redirect to the list of customers
+
+    context = {
+        'object': customer
+    }
+    return render(request, 'website/generics/confirm_delete.html', context)
+
+
 # Company Views
 # Class Based Views
 class CompanyList(ListView):
@@ -125,6 +139,11 @@ class CompanyCreate(CreateView):
     template_name = 'website/generics/create_edit_form.html'
     
 
+class CompanyUpdate(UpdateView):
+    model = Company
+    form_class = CompanyForm
+    template_name = 'website/generics/create_edit_form.html'
+    
 class CompanyDelete(DeleteView):
     model = Company
     success_url = reverse_lazy('company_list') # Redirect after successful deletion
@@ -134,3 +153,16 @@ class CompanyDelete(DeleteView):
     #     obj = super().get_object()
     #     # Add your custom logic (e.g., check if the user owns the company)
     #     return obj
+
+# User Views
+
+class UserList(ListView):
+    model = User
+    template_name = 'website/user/user_list.html'
+    paginate_by = 10
+    
+
+class UserDetail(DetailView):    
+    model = User
+    template_name = 'website/user/user_detail.html'
+    context_object_name = 'user'    

@@ -16,7 +16,7 @@
         </a>
         
         <a href="{% url "customer_update" customer.id%}" class="btn btn-warning">Modify</a>
-        <a href="#" class="btn btn-danger">Delete</a>
+        <a href="{% url "customer_delete" customer.id%}" class="btn btn-danger">Delete</a>
         <a href="#" class="btn btn-info">Deals</a>
         <a href="#" class="btn btn-success">Tasks</a>
     </div>
