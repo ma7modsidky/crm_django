@@ -1,16 +1,6 @@
 from django.db import models
 from django.urls import reverse
-# Create your models here.
-
-# class ContactInfo(models.Model):
-#     phone_number = models.CharField(max_length=20)
-#     phone_number_2 = models.CharField(max_length=20,blank=True, null=True)
-#     email = models.EmailField(unique=True)
-#     address = models.TextField(blank=True, null=True)
-#     country = models.CharField(max_length=100)
-#     state = models.CharField(max_length=100, blank=True, null=True)
-#     city = models.CharField(max_length=100, blank=True, null=True)
-#     zip_code = models.CharField(max_length=100, blank=True, null=True)
+# Create your models here.        
 class Customer(models.Model):
     """
     Represents a customer in the CRM system.

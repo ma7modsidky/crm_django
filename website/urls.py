@@ -13,6 +13,8 @@ urlpatterns = [
     path('customers/<int:pk>/', views.customer_detail, name='customer_detail'),
     path('customers/<int:pk>/modify/', views.customer_update, name='customer_update'),
     path('customers/<int:pk>/delete/', views.customer_delete, name='customer_delete'),
+    path('customers/<int:customer_id>/deals/', views.CustomerDealsListView.as_view(), name='customer_deals_list'),
+    
     # Company Urls
     path('companies/', views.CompanyList.as_view(), name='company_list'),
     path('companies/<int:pk>/', views.CompanyDetail.as_view(), name='company_detail'),
@@ -22,4 +24,7 @@ urlpatterns = [
     # Users Urls
     path('users/', views.UserList.as_view(), name='user_list'),
     path('users/<int:pk>/', views.UserDetail.as_view(), name='user_detail'),
+    # Deals Urls
+    path('deals/', views.DealList.as_view(), name='deal_list'),
+    path('deals/create/', views.DealCreate.as_view(), name='deal_create'),
 ]

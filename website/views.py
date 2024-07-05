@@ -1,7 +1,8 @@
+from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import LoginForm, SignUpForm, CustomerForm, CompanyForm
+from .forms import LoginForm, SignUpForm, CustomerForm, CompanyForm, DealForm
 from . models import Customer, Company , Deal, Task
 from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
@@ -166,3 +167,38 @@ class UserDetail(DetailView):
     model = User
     template_name = 'website/user/user_detail.html'
     context_object_name = 'user'    
+    
+# Deals
+
+class DealList(ListView):
+    model = Deal
+    template_name = 'website/deal/deal_list.html'
+    context_object_name = 'deals'
+
+class CustomerDealsListView(ListView):
+    model = Deal
+    template_name = 'website/deal/deal_list_customer.html'
+    context_object_name = 'deals'    
+    
+    def get_queryset(self):
+        # Retrieve the customer ID from the URL parameter (e.g., /customer/1/deals/)
+        customer_id = self.kwargs.get('customer_id')  # Assuming you use 'customer_id' as the parameter name
+
+        # Get the customer object based on the ID
+        customer = Customer.objects.get(pk=customer_id)
+
+        # Retrieve all deals associated with this customer
+        return Deal.objects.filter(customer=customer)
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Add the customer instance to the context
+        customer_id = self.kwargs.get('customer_id')
+        customer = Customer.objects.get(pk=customer_id)
+        context['customer'] = customer  # Replace 'customer' with the actual variable name
+        return context
+class DealCreate(CreateView):
+    model = Deal
+    form_class = DealForm
+    template_name = 'website/generics/create_edit_form.html'
+    success_url = reverse_lazy('deal_list')
