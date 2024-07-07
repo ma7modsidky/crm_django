@@ -40,7 +40,7 @@
             <tbody>
                 {% for deal in deals %}
                     <tr>
-                        <td><a href="#">{{ deal.id }}</a></td>
+                        <td><a href="{% url 'deal_detail' deal.id %}">{{ deal.id }}</a></td>
                         <td>{{ deal.title }}</td>
                         <td>{{ deal.customer.name }}</td>
                         <td>{{ deal.company.name }}</td>

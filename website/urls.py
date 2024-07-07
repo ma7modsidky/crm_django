@@ -13,7 +13,9 @@ urlpatterns = [
     path('customers/<int:pk>/', views.customer_detail, name='customer_detail'),
     path('customers/<int:pk>/modify/', views.customer_update, name='customer_update'),
     path('customers/<int:pk>/delete/', views.customer_delete, name='customer_delete'),
+    # Customer Deals
     path('customers/<int:customer_id>/deals/', views.CustomerDealsListView.as_view(), name='customer_deals_list'),
+    path('customers/<int:customer_id>/deals/create/', views.DealCreate.as_view(), name='customer_deal_create'),
     
     # Company Urls
     path('companies/', views.CompanyList.as_view(), name='company_list'),
@@ -27,4 +29,8 @@ urlpatterns = [
     # Deals Urls
     path('deals/', views.DealList.as_view(), name='deal_list'),
     path('deals/create/', views.DealCreate.as_view(), name='deal_create'),
+    path('deals/<int:pk>/', views.DealDetail.as_view(), name='deal_detail'),
+    path('deals/<int:pk>/modify/', views.DealUpdate.as_view(), name='deal_update'),
+    path('deals/<int:pk>/delete/', views.DealDelete.as_view(), name='deal_delete'),
+    
 ]

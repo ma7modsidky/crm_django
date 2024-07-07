@@ -54,8 +54,8 @@ class Deal(models.Model):
         ('negotiation', 'Negotiation'),
         ('closed', 'Closed'),
     ])
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True)
+    customer = models.ForeignKey(Customer, related_name='deals',on_delete=models.CASCADE)
+    company = models.ForeignKey(Company,related_name='deals' ,on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

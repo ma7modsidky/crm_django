@@ -11,7 +11,11 @@ from django.contrib.auth.models import User
 # Create your views here.
 
 def home(request):
-    return render(request, 'website/home.html', {})
+    if request.user.is_authenticated:
+        return render(request, 'website/home.html', {})
+    else:
+        return redirect('login')
+    
 
 def login_user(request):
     if request.method == 'POST':
@@ -75,7 +79,8 @@ def customer_list(request):
 
 def customer_detail(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
-    return render(request, 'website/customer/customer_detail.html' , {"customer": customer})
+    latest_deals = Deal.objects.filter(customer=customer).order_by('-created_at')[:5]
+    return render(request, 'website/customer/customer_detail.html' , {"customer": customer, "deals": latest_deals})
 
 def customer_update(request, pk):
     """
@@ -202,3 +207,46 @@ class DealCreate(CreateView):
     form_class = DealForm
     template_name = 'website/generics/create_edit_form.html'
     success_url = reverse_lazy('deal_list')
+    
+    def get_initial(self):
+        initial = super().get_initial()
+        # Assuming you have a foreign key field named 'customer' in your DealForm
+        # You can replace 'customer_id' with the actual field name in your form
+        if self.kwargs.get('customer_id'):
+            customer_id = self.kwargs.get('customer_id')  # Get the customer ID from the URL
+            customer = get_object_or_404(Customer, pk=customer_id)
+            initial['customer'] = customer
+        return initial
+    
+    def get_success_url(self):
+        customer_id = self.kwargs.get('customer_id')
+        if customer_id:
+            customer = get_object_or_404(Customer, pk=customer_id)
+            # Redirect to a specific customer detail page
+            return reverse_lazy('customer_detail', kwargs={'pk': customer_id})
+        else:
+            # Redirect to a generic list view (e.g., deal_list)
+            return reverse_lazy('deal_list')
+    
+class DealDetail(DetailView):
+    model = Deal
+    template_name = 'website/deal/deal_detail.html'
+
+class DealUpdate(UpdateView):
+    model = Deal
+    form_class = DealForm
+    template_name = 'website/generics/create_edit_form.html'
+    
+class DealDelete(DeleteView):
+    model = Deal
+    success_url = reverse_lazy('deal_list') # Redirect after successful deletion
+    
+    def get_success_url(self):
+        customer_id = self.kwargs.get('customer_id')
+        if customer_id:
+            customer = get_object_or_404(Customer, pk=customer_id)
+            # Redirect to a specific customer detail page
+            return reverse_lazy('customer_detail', kwargs={'pk': customer_id})
+        else:
+            # Redirect to a generic list view (e.g., deal_list)
+            return reverse_lazy('deal_list')

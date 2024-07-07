@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container mt-5">
-    <h1>Customer [{{ customer.id}}] Details</h1>
+    <h1>Customer [{{ customer.id}}] {{customer.name}} Details</h1>
 
     <!-- Colored tabs for actions -->
     <div class="my-4 gap-2 d-flex flex-wrap">
@@ -73,5 +73,65 @@
             </tr>
         </tbody>
     </table>
+
+    <div class="accordion my-4" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Latest Deals
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+                <!-- Colored tabs for actions -->
+                <div class="my-2 gap-2 d-flex flex-wrap">
+                    
+                    <a href="{% url "customer_deals_list" customer.id%}" class="btn btn-primary">All Deals</a>
+                    <a href="{% url "customer_deal_create" customer.id%}" class="btn btn-success">New Deal</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Title</th>
+                                <th>Company</th>
+                                <th>Stage</th>
+                                <th>Created at</th>
+                                <th>Updated at</th>
+                                <!-- Add more columns for other customer fields -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for deal in deals.all %}
+                                <tr>
+                                    <td><a href="{% url 'deal_detail' deal.id %}">{{ deal.id }}</a></td>
+                                    <td>{{ deal.title }}</td>
+                                    <td>{{ deal.company.name }}</td>
+                                    <td>{{ deal.stage }}</td>
+                                    <td>{{ deal.created_at }}</td>
+                                    <td>{{ deal.updated_at }}</td>
+                                    <!-- Add more columns for other customer fields -->
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              Latest Tasks
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+            </div>
+          </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
