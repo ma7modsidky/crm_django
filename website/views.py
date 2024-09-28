@@ -1,5 +1,5 @@
-from django.db.models.query import QuerySet
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, SignUpForm, CustomerForm, CompanyForm, DealForm
@@ -26,6 +26,8 @@ def login_user(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, 'you have been logged in successfully')
+                if request.GET.get('next'):
+                    return redirect(request.GET.get('next'))
                 return redirect('home')
             else:
                 messages.error(request, 'There was an error, please try again')
@@ -125,32 +127,32 @@ def customer_delete(request, pk):
 
 # Company Views
 # Class Based Views
-class CompanyList(ListView):
+class CompanyList(LoginRequiredMixin,ListView):
     """Display a list of comapnies."""
     model = Company
     template_name = 'website/company/company_list.html'
     paginate_by = 3
 
 
-class CompanyDetail(DetailView):    
+class CompanyDetail(LoginRequiredMixin,DetailView):    
     model = Company
     template_name = 'website/company/company_detail.html'
     context_object_name = 'company'
     
     
-class CompanyCreate(CreateView):
+class CompanyCreate(LoginRequiredMixin,CreateView):
     model = Company
     # fields = "__all__"  # Specifing fields and form class is not permitted
     form_class = CompanyForm
     template_name = 'website/generics/create_edit_form.html'
     
 
-class CompanyUpdate(UpdateView):
+class CompanyUpdate(LoginRequiredMixin,UpdateView):
     model = Company
     form_class = CompanyForm
     template_name = 'website/generics/create_edit_form.html'
     
-class CompanyDelete(DeleteView):
+class CompanyDelete(LoginRequiredMixin,DeleteView):
     model = Company
     success_url = reverse_lazy('company_list') # Redirect after successful deletion
 
@@ -162,25 +164,25 @@ class CompanyDelete(DeleteView):
 
 # User Views
 
-class UserList(ListView):
+class UserList(LoginRequiredMixin,ListView):
     model = User
     template_name = 'website/user/user_list.html'
     paginate_by = 10
     
 
-class UserDetail(DetailView):    
+class UserDetail(LoginRequiredMixin,DetailView):    
     model = User
     template_name = 'website/user/user_detail.html'
     context_object_name = 'user'    
     
 # Deals
 
-class DealList(ListView):
+class DealList(LoginRequiredMixin,ListView):
     model = Deal
     template_name = 'website/deal/deal_list.html'
     context_object_name = 'deals'
 
-class CustomerDealsListView(ListView):
+class CustomerDealsListView(LoginRequiredMixin,ListView):
     model = Deal
     template_name = 'website/deal/deal_list_customer.html'
     context_object_name = 'deals'    
@@ -202,7 +204,7 @@ class CustomerDealsListView(ListView):
         customer = Customer.objects.get(pk=customer_id)
         context['customer'] = customer  # Replace 'customer' with the actual variable name
         return context
-class DealCreate(CreateView):
+class DealCreate(LoginRequiredMixin,CreateView):
     model = Deal
     form_class = DealForm
     template_name = 'website/generics/create_edit_form.html'
@@ -228,16 +230,16 @@ class DealCreate(CreateView):
             # Redirect to a generic list view (e.g., deal_list)
             return reverse_lazy('deal_list')
     
-class DealDetail(DetailView):
+class DealDetail(LoginRequiredMixin,DetailView):
     model = Deal
     template_name = 'website/deal/deal_detail.html'
 
-class DealUpdate(UpdateView):
+class DealUpdate(LoginRequiredMixin,UpdateView):
     model = Deal
     form_class = DealForm
     template_name = 'website/generics/create_edit_form.html'
     
-class DealDelete(DeleteView):
+class DealDelete(LoginRequiredMixin,DeleteView):
     model = Deal
     success_url = reverse_lazy('deal_list') # Redirect after successful deletion
     
