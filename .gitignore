@@ -8,6 +8,7 @@ commands.txt
 .vscode
 **/.env
 
+
 # Django #
 *.log
 *.pot

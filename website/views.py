@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import LoginForm, SignUpForm, CustomerForm, CompanyForm, DealForm
 from . models import Customer, Company , Deal, Task
@@ -8,6 +9,7 @@ from django.core.paginator import Paginator
 from django.views.generic import ListView, DetailView, DeleteView, UpdateView, CreateView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
+from django.db.models import Q
 # Create your views here.
 
 def home(request):
@@ -62,11 +64,17 @@ def register_user(request):
 
 # Customer Views
 # Function Based Views
+@login_required
 def customer_list(request):
     """Display a list of customers."""
-    customers = Customer.objects.all()
+    query = request.GET.get('query')
+    if query:
+        customers = Customer.objects.filter(Q(first_name__contains=query) | Q(last_name__contains=query))
+    else:    
+        customers = Customer.objects.all()
     # Set the number of items per page
-    items_per_page = 10
+    print(customers)
+    items_per_page = 15
     
     # Create a Paginator instance
     paginator = Paginator(customers, items_per_page)
@@ -79,11 +87,13 @@ def customer_list(request):
     
     return render(request, 'website/customer/customer_list.html', {'page': page})
 
+@login_required
 def customer_detail(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     latest_deals = Deal.objects.filter(customer=customer).order_by('-created_at')[:5]
     return render(request, 'website/customer/customer_detail.html' , {"customer": customer, "deals": latest_deals})
 
+@login_required
 def customer_update(request, pk):
     """
     Update customer details.
@@ -100,6 +110,7 @@ def customer_update(request, pk):
 
     return render(request, 'website/customer/customer_update.html', {'form': form, 'customer': customer})
 
+@login_required
 def customer_create(request):
     if request.method == 'POST':
         form = CustomerForm(request.POST)
@@ -112,6 +123,7 @@ def customer_create(request):
 
     return render(request, 'website/generics/create_edit_form.html', {'form': form})
 
+@login_required
 def customer_delete(request, pk):
     customer = get_object_or_404(Customer, pk=pk)
     if request.method == 'POST':
@@ -131,7 +143,7 @@ class CompanyList(LoginRequiredMixin,ListView):
     """Display a list of comapnies."""
     model = Company
     template_name = 'website/company/company_list.html'
-    paginate_by = 3
+    paginate_by = 10
 
 
 class CompanyDetail(LoginRequiredMixin,DetailView):    
